@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 from sklearn.cluster import KMeans
+import colorsys
 
 SIZE = (256, 192)
 
@@ -15,5 +16,39 @@ def dominant_color(image_path, k=5):
     
     return tuple(map(int, dominant))
 
+def adjust_palette(image_path, target_rgb, saturation_multiplier=1.0, brightness_multiplier=1.0):
+    # Load image
+    img = Image.open(image_path)
+
+    if img.mode != "P":
+        raise ValueError("Image must be in palette (P) mode with ≤16 colors.")
+
+    # Get the current palette
+    palette = img.getpalette()[:48]  # Only first 16 colors (16 x 3 = 48)
+    new_palette = [255, 0, 255] # SKIP THE FIRST COLOR WHICH IS ALWAYS MAGENTA (BG transparency)
+
+    # Convert target color to HSV
+    target_h, target_s, target_v = colorsys.rgb_to_hsv(*[x/255.0 for x in target_rgb])
+
+    for i in range(3, 48, 3):  # Process each RGB triplet from the second slot in the new palete
+        r, g, b = palette[i], palette[i+1], palette[i+2]
+        h, s, v = colorsys.rgb_to_hsv(r/255.0, g/255.0, b/255.0)
+
+        # Blend hue towards target hue
+        h = target_h
+
+        # Adjust saturation and brightness
+        s = min(max(s * saturation_multiplier, 0), 1)
+        v = min(max(v * brightness_multiplier, 0), 1)
+
+        # Convert back to RGB
+        r_new, g_new, b_new = colorsys.hsv_to_rgb(h, s, v)
+        new_palette.extend([int(r_new*255), int(g_new*255), int(b_new*255)])
+    # Apply the new palette to the image
+    img.putpalette(new_palette)
+
+    return img
+
 if __name__=="__main__":
-    print(dominant_color('top.png'))  
+  img = adjust_palette("folder.bmp", (255, 0, 0), saturation_multiplier=2, brightness_multiplier=3)
+  img.save("f_ad.bmp")

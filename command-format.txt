@@ -1,0 +1,7 @@
+# UNRELEASED / PROTOTYPE
+
+qdst --top "path/to/256x192-image.png" --bottom "path-to-256x192-image.png" --color "#FF00FF" --lm 1.5 --sm 1.5
+      --bgm "path/to/16bit-mono.wav"
+
+# TASKS
+

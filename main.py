@@ -72,34 +72,10 @@ def qdst(theme_name: str, top: str, bottom: str, color: tuple[int, int, int], lm
 
     # save these too
 
-    box.save(theme_name + "/grf/box_.bmp", bits=4)
-    brace.save(theme_name + "/grf/brace_.bmp", bits=4)
-    folder.save(theme_name + "/grf/folder_.bmp", bits=4)
+    box.save(theme_name + "/grf/box.bmp")
+    brace.save(theme_name + "/grf/brace.bmp")
+    folder.save(theme_name + "/grf/folder.bmp")
 
-    images = ["box_.bmp", "brace_.bmp", "folder_.bmp"]
-    grf_path = os.path.join(theme_name, "grf")
-
-    for filename in images:
-        img_path = os.path.join(grf_path, filename)
-        img = Image.open(img_path)
-
-        # Step 1: Convert to 16-color palette
-        img_16 = img.convert("P", palette=Image.ADAPTIVE, colors=16)
-
-        # Step 2: Build a new palette array of exactly 16 colors
-        palette = img_16.getpalette()[:16*3]  # get first 16 RGB triplets
-        # Fill remaining colors to make 256-length palette (required by BMP)
-        palette += [0]*(256*3 - len(palette))
-
-        img_16.putpalette(palette)
-
-        # Step 3: Save manually as 4-bit BMP
-        new_filename = filename.replace("_", "")
-        save_path = os.path.join(grf_path, new_filename)
-        img_16.save(save_path, format="BMP", bits=4)
-
-        print(f"Saved {save_path} as true 4-bit BMP")
-        
     # copy the rest of the static grf elements
     for file in glob.glob("template/grf/static/*.bmp"):
         shutil.copy(file, os.path.join(theme_name, "grf"))

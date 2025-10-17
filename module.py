@@ -130,5 +130,7 @@ def adjust_palette_png(image_path, target_rgb, saturation_multiplier=1.0, bright
     return img
 
 if __name__=="__main__":
-  img = adjust_palette("folder.bmp", (255, 0, 0), saturation_multiplier=2, brightness_multiplier=3)
-  img.save("f_ad.bmp")
+  # img = adjust_palette("folder.bmp", (255, 0, 0), saturation_multiplier=2, brightness_multiplier=3)
+  # img.save("f_ad.bmp")
+
+  print(dominant_color("profile_colors.png"))

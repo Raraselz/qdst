@@ -1,8 +1,7 @@
-from encodings.punycode import T
 import PIL.Image
 from module import *
 import PIL
-import os, shutil, glob
+import os, shutil, glob, subprocess, argparse
 
 OVERLAY_BOTTOM_BUBBLE_MACRO = "template/overlays/static/overlay_bottom_bubble_macro.png"
 OVERLAY_BOTTOM_BUBBLE       = "template/overlays/static/overlay_bottom_bubble.png"
@@ -18,13 +17,62 @@ GRF_FOLDER = "template/grf/folder.bmp"
 # bottom -> address for the 256x192 bottom image
 
 def hex_to_rgb(hex: str) -> tuple[int, int, int]:
-    pass
+    global args
+
+    # check for auto top / bottom
+    if (hex == "at"):
+        return dominant_color(args.top)
+    elif (hex == "ab"):
+        return dominant_color(args.bottom)
+    
+    # Remove leading '#' if present
+    hex = hex.lstrip('#')
+
+    # Validate length
+    if len(hex) != 6:
+        raise ValueError(f"Invalid hex color: '{hex}'. Expected format: RRGGBB")
+
+    # Convert to integer tuple
+    r = int(hex[0:2], 16)
+    g = int(hex[2:4], 16)
+    b = int(hex[4:6], 16)
+
+    return (r, g, b)
 
 def generate_and_show_preview():
     pass
+
+def convert_to_4bit_bitmap(path: str) -> bool:
+    # Check if 'magick' is installed and in PATH
+    if shutil.which("magick") is None:
+        print("❌ ImageMagick (magick) is not installed or not found in PATH.")
+        return False
+
+    output_path = "output.bmp"  # You can modify this or make it a parameter
+
+    try:
+        result = subprocess.run(
+            ['magick', path, '-depth', '4', f'BMP3:{output_path}'],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        print("✅ Conversion successful.")
+        print(f"STDOUT:\n{result.stdout}")
+        return True
+
+    except subprocess.CalledProcessError as e:
+        print("❌ Failed to run bit depth conversion with magick!")
+        print(f"Return code: {e.returncode}")
+        print(f"STDERR:\n{e.stderr}")
+        return False
+
+    except FileNotFoundError:
+        print("❌ 'magick' command not found. Make sure ImageMagick is installed and in PATH.")
+        return False
  
 def qdst(theme_name: str, top: str, bottom: str, color: tuple[int, int, int], lm: float = 1.0, sm: float = 1.0, lmo: float = 1.0, smo: float = 1.0, bgm: str = None):
-    
+
     # create directory with team_name
     os.makedirs(os.path.join(theme_name, "background"), exist_ok=True)
     os.makedirs(os.path.join(theme_name, "grf"), exist_ok=True)
@@ -94,4 +142,18 @@ def qdst(theme_name: str, top: str, bottom: str, color: tuple[int, int, int], lm
 
 
 if __name__ == "__main__":
-    qdst("TEST Theme", "test/top.png", "test/bottom.png", (255, 0, 0), 2, 1.9, 2, 1.5) # test run
+    #qdst("TEST Theme", "test/top.png", "test/bottom.png", (255, 0, 0), 2, 1.9, 2, 1.5) # test run
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-t", "--top", help="path to the top 256x192 png image", required=True)
+    parser.add_argument("-b", "--bottom", help="path to the bottom 256x192 png image", required=True)
+    parser.add_argument("-c", "--color", help="paint color (eg. #FFFFFF) / at / ab (auto top/bottom)", required=True)
+    parser.add_argument('--lm', help="luminosity multiplier: float", type=float)
+    parser.add_argument('--sm', help="saturation multiplier: float", type=float)
+    parser.add_argument('--lmo', help="saturation multiplier for bottom background elements: float", type=float)
+    parser.add_argument('--smo', help="saturation multiplier for bottom background elements: float", type=float)
+    parser.add_argument('--bgm', help='path to bgm (16bit mono)')
+    parser.add_argument("name", help="name of your theme")
+    args = parser.parse_args()
+
+    qdst(args.name, args.top, args.bottom, hex_to_rgb(args.color), args.lm, args.sm, args.lmo, args.smo, args.bgm)

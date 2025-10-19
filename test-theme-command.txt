@@ -1,1 +1,0 @@
-py main.py --top "test/top.png" --bottom "test/bottom.png" --color "#FF0000" --lm 2 --sm 1.9 --lmo 2 --smo 1.5 "TEST Theme"

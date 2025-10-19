@@ -133,4 +133,4 @@ if __name__=="__main__":
   # img = adjust_palette("folder.bmp", (255, 0, 0), saturation_multiplier=2, brightness_multiplier=3)
   # img.save("f_ad.bmp")
 
-  log(dominant_color("profile_colors.png"))
+  print(dominant_color("profile_colors.png"))

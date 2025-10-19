@@ -42,13 +42,13 @@ def hex_to_rgb(hex: str) -> tuple[int, int, int]:
 def generate_and_show_preview():
     pass
 
-def convert_to_4bit_bitmap(path: str) -> bool:
+def convert_to_4bit_bitmap(path: str, op_path: str) -> bool:
     # Check if 'magick' is installed and in PATH
     if shutil.which("magick") is None:
         print("❌ ImageMagick (magick) is not installed or not found in PATH.")
         return False
 
-    output_path = "output.bmp"  # You can modify this or make it a parameter
+    output_path = op_path  # You can modify this or make it a parameter
 
     try:
         result = subprocess.run(
@@ -120,9 +120,16 @@ def qdst(theme_name: str, top: str, bottom: str, color: tuple[int, int, int], lm
 
     # save these too
 
-    box.save(theme_name + "/grf/box.bmp")
-    brace.save(theme_name + "/grf/brace.bmp")
-    folder.save(theme_name + "/grf/folder.bmp")
+    box.save(theme_name + "/grf/box_.bmp")
+    brace.save(theme_name + "/grf/brace_.bmp")
+    folder.save(theme_name + "/grf/folder_.bmp")
+
+    # Convert them to compatible 4bit bitmaps
+
+    convert_to_4bit_bitmap(theme_name + "/grf/box_.bmp", theme_name + "/grf/box.bmp")
+    convert_to_4bit_bitmap(theme_name + "/grf/brace_.bmp", theme_name + "/grf/brace.bmp")
+    convert_to_4bit_bitmap(theme_name + "/grf/folder_.bmp", theme_name + "/grf/folder.bmp")
+
 
     # copy the rest of the static grf elements
     for file in glob.glob("template/grf/static/*.bmp"):

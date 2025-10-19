@@ -238,6 +238,8 @@ def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int
 # -2 -> invalid color
 
 if __name__ == "__main__":
+    print(zcolors.FG_LIGHTMAGENTA + "QDST | quick DSi theme maker | unreleased BETA | Raraselz" + zcolors.X)
+    print(f"Check out {zcolors.FG_LIGHTCYAN}https://github.com/Raraselz/qdst{zcolors.X}")
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--top", help="path to the top 256x192 png image", required=True)
     parser.add_argument("-b", "--bottom", help="path to the bottom 256x192 png image", required=True)

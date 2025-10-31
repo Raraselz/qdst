@@ -3,17 +3,24 @@ import PIL.Image
 from module import *
 from zcolors import zcolors
 import PIL
-import os, shutil, glob, subprocess, argparse
+import os, shutil, glob, subprocess, argparse, sys
 
-OVERLAY_BOTTOM_BUBBLE_MACRO = "template/overlays/static/overlay_bottom_bubble_macro.png"
-OVERLAY_BOTTOM_BUBBLE       = "template/overlays/static/overlay_bottom_bubble.png"
-OVERLAY_TOP_PHOTO           = "template/overlays/static/overlay_top_photo.png"
-OVERLAY_BOTTOM_BAR          = "template/overlays/bottom_bar.png"       # these two need
-OVERLAY_MOVING              = "template/overlays/moving.png"  #  recoloring
+if getattr(sys, 'frozen', False):
+    # Running as a PyInstaller bundle
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    # Running as a normal script
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-GRF_BOX    = "template/grf/box.bmp"
-GRF_BRACE  = "template/grf/brace.bmp"
-GRF_FOLDER = "template/grf/folder.bmp"
+OVERLAY_BOTTOM_BUBBLE_MACRO = BASE_DIR + "/template/overlays/static/overlay_bottom_bubble_macro.png"
+OVERLAY_BOTTOM_BUBBLE       = BASE_DIR + "/template/overlays/static/overlay_bottom_bubble.png"
+OVERLAY_TOP_PHOTO           = BASE_DIR + "/template/overlays/static/overlay_top_photo.png"
+OVERLAY_BOTTOM_BAR          = BASE_DIR + "/template/overlays/bottom_bar.png"       # these two need
+OVERLAY_MOVING              = BASE_DIR + "/template/overlays/moving.png"  #  recoloring
+
+GRF_BOX    = BASE_DIR + "/template/grf/box.bmp"
+GRF_BRACE  = BASE_DIR + "/template/grf/brace.bmp"
+GRF_FOLDER = BASE_DIR + "/template/grf/folder.bmp"
 
 PREFIX = " <qdst> "
 
@@ -206,7 +213,7 @@ def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int
 
     # copy the rest of the static grf elements, except start_text
     try:
-        for file in glob.glob("template/grf/static/*.bmp"):
+        for file in glob.glob(BASE_DIR + "template/grf/static/*.bmp"):
             filename = os.path.basename(file)
             if filename in ("start_text.bmp", "start_text_jp.bmp"):
                 continue  # skip these two files
@@ -225,16 +232,16 @@ def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int
     # depending on the --jp flag we wil copy the correct start_text.bmp
 
     if jp:
-        shutil.copy(os.path.join("template", "static", "start_text_jp.bmp"), os.path.join(theme_name, "grf", "start_text.bmp"))
+        shutil.copy(os.path.join(BASE_DIR, "template", "grf", "static", "start_text_jp.bmp"), os.path.join(theme_name, "grf", "start_text.bmp"))
     else:
-        shutil.copy(os.path.join("template", "static", "start_text.bmp"), os.path.join(theme_name, "grf"))        
+        shutil.copy(os.path.join(BASE_DIR, "template", "grf", "static", "start_text.bmp"), os.path.join(theme_name, "grf"))        
     
     # copy battery, ui, quickmenu and volume folders
     try:
-        shutil.copytree("template/battery", os.path.join(theme_name, "battery"), dirs_exist_ok=True)
-        shutil.copytree("template/ui", os.path.join(theme_name, "ui"), dirs_exist_ok=True)
-        shutil.copytree("template/quickmenu", os.path.join(theme_name, "quickmenu"), dirs_exist_ok=True)
-        shutil.copytree("template/volume", os.path.join(theme_name, "volume"), dirs_exist_ok=True)
+        shutil.copytree(BASE_DIR, "template/battery", os.path.join(theme_name, "battery"), dirs_exist_ok=True)
+        shutil.copytree(BASE_DIR, "template/ui", os.path.join(theme_name, "ui"), dirs_exist_ok=True)
+        shutil.copytree(BASE_DIR, "template/quickmenu", os.path.join(theme_name, "quickmenu"), dirs_exist_ok=True)
+        shutil.copytree(BASE_DIR, "template/volume", os.path.join(theme_name, "volume"), dirs_exist_ok=True)
         log(zcolors.FG_WHITE + "Copied template/ battery, ui, quickmenu and volume elements to " + "/" + theme_name + zcolors.X)
     except:
         log(zcolors.FG_LIGHTRED + "Failed to copy template/ battery, ui, quickmenu and volume elements! Please perform a clean reinstall and try again. Aborting..." + zcolors.X); abort()
@@ -242,7 +249,7 @@ def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int
 
     # Finally, copy the bgm if existent and the theme.ini file
     try: 
-        shutil.copy("template/theme.ini", os.path.join(theme_name, "theme.ini"))
+        shutil.copy(BASE_DIR+"/template/theme.ini", os.path.join(theme_name, "theme.ini"))
         log(zcolors.FG_WHITE + "Copied theme.ini")
     except:
         log(zcolors.FG_LIGHTRED + "Failed to copy theme.ini! Please perform a clean reinstall and try again. Aborting..." + zcolors.X); abort()
@@ -251,13 +258,17 @@ def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int
     if bgm:
         pass
 
+    log(zcolors.FG_LIGHTGREEN + "Done creating your theme!" + zcolors.X)
+    log("QUICK TIP! You can use QDSP to easily preview your new theme. qdsp -h for more")
+
     return 0
 
 # ERROR CODES
 # -2 -> invalid color
 
 if __name__ == "__main__":
-    print(zcolors.FG_LIGHTMAGENTA + "qdst | Quick DSi Theme Maker | unknown GitHub version | Raraselz" + zcolors.X)
+        
+    print(zcolors.FG_LIGHTMAGENTA + "qdst | Quick DSi Theme Maker | unknown version | Raraselz" + zcolors.X)
     print(f"Check out {zcolors.FG_LIGHTCYAN}https://github.com/Raraselz/qdst{zcolors.X}")
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--top", help="path to the top 256x192 png image", required=True)
@@ -275,4 +286,4 @@ if __name__ == "__main__":
     try: color_rgb = hex_to_rgb(args.color)
     except: log(zcolors.FG_LIGHTRED + "Invalid color! Aborting..." + zcolors.X); exit(-2)
 
-    exit(qdst(args.name, args.top, args.bottom, color_rgb, args.lm, args.sm, args.lmo, args.smo, args.bgm, args.jp))
+    sys.exit(qdst(args.name, args.top, args.bottom, color_rgb, args.lm, args.sm, args.lmo, args.smo, args.bgm, args.jp))

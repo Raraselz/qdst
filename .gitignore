@@ -1,6 +1,8 @@
 # mine
 test/*
 test
+DRIGNEI 1/*
+preview/work/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

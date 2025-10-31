@@ -174,7 +174,7 @@ def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int
     bottom_moving.save(os.path.join(theme_name, "background", "bottom_moving.png"))
     bottom_bubble.save(os.path.join(theme_name, "background", "bottom_bubble.png"))
     bottom_bubble_macro.save(os.path.join(theme_name, "background", "bottom_bubble_macro.png"))
-    log(zcolors.FG_WHITE + "Combined bottom base with all recolored elements")
+    log(zcolors.FG_WHITE + "Combined bottom base with all recolored elements" + zcolors.X)
 
     ### GRF (BITMAPS)
 
@@ -182,7 +182,7 @@ def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int
         box = adjust_palette(GRF_BOX, color, sm, lm)
         brace = adjust_palette_4c(GRF_BRACE, color, sm, lm)
         folder = adjust_palette(GRF_FOLDER, color, sm, lm)
-        log(zcolors.FG_WHITE + "Loaded and recolored graphic bitmaps in 8-bit depth")
+        log(zcolors.FG_WHITE + "Loaded and recolored graphic bitmaps in 8-bit depth" + zcolors.X)
     except:
         log(zcolors.FG_LIGHTRED + "Failed to load/recolor graphic bitmaps from template/grf! Please perform a clean reinstall and try again. Aborting..." + zcolors.X); abort()
         return -6

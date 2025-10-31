@@ -238,10 +238,10 @@ def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int
     
     # copy battery, ui, quickmenu and volume folders
     try:
-        shutil.copytree(BASE_DIR, "template/battery", os.path.join(theme_name, "battery"), dirs_exist_ok=True)
-        shutil.copytree(BASE_DIR, "template/ui", os.path.join(theme_name, "ui"), dirs_exist_ok=True)
-        shutil.copytree(BASE_DIR, "template/quickmenu", os.path.join(theme_name, "quickmenu"), dirs_exist_ok=True)
-        shutil.copytree(BASE_DIR, "template/volume", os.path.join(theme_name, "volume"), dirs_exist_ok=True)
+        shutil.copytree(BASE_DIR+ "/template/battery", os.path.join(theme_name, "battery"), dirs_exist_ok=True)
+        shutil.copytree(BASE_DIR+ "/template/ui", os.path.join(theme_name, "ui"), dirs_exist_ok=True)
+        shutil.copytree(BASE_DIR+ "/template/quickmenu", os.path.join(theme_name, "quickmenu"), dirs_exist_ok=True)
+        shutil.copytree(BASE_DIR+ "/template/volume", os.path.join(theme_name, "volume"), dirs_exist_ok=True)
         log(zcolors.FG_WHITE + "Copied template/ battery, ui, quickmenu and volume elements to " + "/" + theme_name + zcolors.X)
     except:
         log(zcolors.FG_LIGHTRED + "Failed to copy template/ battery, ui, quickmenu and volume elements! Please perform a clean reinstall and try again. Aborting..." + zcolors.X); abort()

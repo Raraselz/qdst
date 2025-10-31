@@ -104,7 +104,10 @@ def abort():
 # -7 -> failed to copy static grf
 # -8 -> failed to copy static template elements
 
-def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int], lm: float = 1.0, sm: float = 1.0, lmo: float = 1.0, smo: float = 1.0, bgm: str = None):
+def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int], 
+         lm: float = 1.0, sm: float = 1.0, lmo: float = 1.0, smo: float = 1.0, 
+         bgm: str = None, jp: bool = False):
+   
     # create directory with team_name
 
     log(zcolors.FG_WHITE + "Creating folder structure..." + zcolors.X)
@@ -201,14 +204,30 @@ def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int
     convert_to_4bit_bitmap(theme_name + "/grf/folder_.bmp", theme_name + "/grf/folder.bmp", True)
 
 
-    # copy the rest of the static grf elements
+    # copy the rest of the static grf elements, except start_text
     try:
         for file in glob.glob("template/grf/static/*.bmp"):
+            filename = os.path.basename(file)
+            if filename in ("start_text.bmp", "start_text_jp.bmp"):
+                continue  # skip these two files
+
             shutil.copy(file, os.path.join(theme_name, "grf"))
-        log(zcolors.FG_WHITE + "Copied all static bitmaps to " "/" + theme_name + zcolors.X)
-    except:
-        log(zcolors.FG_LIGHTRED + "Failed to copy static graphic bitmaps from template/grf/static! Please perform a clean reinstall and try again. Aborting..." + zcolors.X); abort()
+        log(zcolors.FG_WHITE + "Copied all static bitmaps to /" + theme_name + zcolors.X)
+
+    except Exception as e:
+        log(zcolors.FG_LIGHTRED + 
+            "Failed to copy static graphic bitmaps from template/grf/static! "
+            "Please perform a clean reinstall and try again. Aborting..." + 
+            zcolors.X)
+        abort()
         return -7
+    
+    # depending on the --jp flag we wil copy the correct start_text.bmp
+
+    if jp:
+        shutil.copy(os.path.join("template", "static", "start_text_jp.bmp"), os.path.join(theme_name, "grf", "start_text.bmp"))
+    else:
+        shutil.copy(os.path.join("template", "static", "start_text.bmp"), os.path.join(theme_name, "grf"))        
     
     # copy battery, ui, quickmenu and volume folders
     try:
@@ -238,7 +257,7 @@ def qdst(theme_name: str, top_path: str, bottom: str, color: tuple[int, int, int
 # -2 -> invalid color
 
 if __name__ == "__main__":
-    print(zcolors.FG_LIGHTMAGENTA + "qdst | Quick DSi Theme Maker | unreleased BETA | Raraselz" + zcolors.X)
+    print(zcolors.FG_LIGHTMAGENTA + "qdst | Quick DSi Theme Maker | unknown GitHub version | Raraselz" + zcolors.X)
     print(f"Check out {zcolors.FG_LIGHTCYAN}https://github.com/Raraselz/qdst{zcolors.X}")
     parser = argparse.ArgumentParser()
     parser.add_argument("-t", "--top", help="path to the top 256x192 png image", required=True)
@@ -249,10 +268,11 @@ if __name__ == "__main__":
     parser.add_argument('--lmo', help="saturation multiplier for bottom background elements: float", type=float)
     parser.add_argument('--smo', help="saturation multiplier for bottom background elements: float", type=float)
     parser.add_argument('--bgm', help='path to bgm (16bit mono)')
+    parser.add_argument('--jp', action="store_true", help="Simple way to turn START text into japanese! (for weebs ^-^)")
     parser.add_argument("name", help="name of your theme")
     args = parser.parse_args()
 
     try: color_rgb = hex_to_rgb(args.color)
     except: log(zcolors.FG_LIGHTRED + "Invalid color! Aborting..." + zcolors.X); exit(-2)
 
-    exit(qdst(args.name, args.top, args.bottom, color_rgb, args.lm, args.sm, args.lmo, args.smo, args.bgm))
+    exit(qdst(args.name, args.top, args.bottom, color_rgb, args.lm, args.sm, args.lmo, args.smo, args.bgm, args.jp))

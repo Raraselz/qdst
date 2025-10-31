@@ -62,7 +62,7 @@ The easiest way to get going is to download the latest release from [Releases](h
 * The release method is somewhat inefficient (and slow) due to PyInstaller and the nature of Python executables. If you’re comfortable with Python, working directly with the source code is recommended.
 * **BGM flag does nothing for now** — I plan to implement proper audio conversion via ffmpeg first.
 * Currently, your theme’s colors are mostly limited by the profile colors available in the DSi system settings. (if you want it to look good)
-* You still need to crop the backgrounds yourself. **Paint** works fine, but if you have **Photoshop**, I highly recommend using it instead.
+* You still need to crop the backgrounds yourself. **Paint** works fine, but if you have **Photoshop / GIMP**, I highly recommend using it instead.
 
 ## 🎨 Purpose
 

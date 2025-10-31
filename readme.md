@@ -22,6 +22,25 @@ It automates the process of combining assets like background images, icons, and 
 
 ## ⚙️ Usage
 
+### Prerequisites
+
+**Windows**
+
+```sh
+winget install ImageMagick.Q8
+```
+
+**macOS**
+```sh
+brew install imagemagick
+```
+
+**Linux**
+
+Idk but I know you're smart if you use it so figure it out :))
+
+***ImageMagick*** is required for conversion to 4-bit bitmaps compatible with TWiLight Menu++
+
 ```sh
 qdst -t "TOP.png" -b "BOTTOM.png" -c "#FF00FF" --lm 2 --sm 2 --lmo 2 --smo 2 --bgm "BGM.wav" --jp "My Cool Theme"
 ``` 
@@ -49,7 +68,7 @@ The easiest way to get going is to download the latest release from [Releases](h
 3. You're set! In the place where you have saved the top and bottom images, right click and *Open in Terminal*.
 4. Run `qdst` with your desired settings.
 
-💡 ***TIP*** | After your theme is done, you can easily preview it using:
+💡 **TIP** | After your theme is done, you can easily preview it using:
 
 ```sh
     qdsp -c 1-15 "Theme Name"

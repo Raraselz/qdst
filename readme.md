@@ -40,6 +40,30 @@ qdst -t "TOP.png" -b "BOTTOM.png" -c "#FF00FF" --lm 2 --sm 2 --lmo 2 --smo 2 --b
 | `--bgm` | optional: path to 16-bit mono WAV bgm file                |
 | `--jp`  | optional: have the START text in japanese (for weebs ^v^) |
 
+### Quick Start
+
+The easiest way to get going is to download the latest release from [Releases](https://github.com/Raraselz/qdst/releases). \
+
+1. Unzip the archive to a known location
+2. Add that location to path (for ease of use) (don't know how? see [this guide](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/))
+3. You're set! In the place where you have saved the top and bottom images, right click and *Open in Terminal*.
+4. Run `qdst` with your desired settings.
+
+💡 ***TIP*** | After your theme is done, you can easily preview it using:
+
+```sh
+    qdsp -c 1-15 "Theme Name"
+```
+
+`-c` represents the profile color index (see [color-indexes.png](https://github.com/Raraselz/qdst/blob/main/color-indexes.png)) try picking the closest one to your accent color
+
+## ⚠️ Things You Should Know
+
+* The release method is somewhat inefficient (and slow) due to PyInstaller and the nature of Python executables. If you’re comfortable with Python, working directly with the source code is recommended.
+* **BGM flag does nothing for now** — I plan to implement proper audio conversion via ffmpeg first.
+* Currently, your theme’s colors are mostly limited by the profile colors available in the DSi system settings. (if you want it to look good)
+* You still need to crop the backgrounds yourself. **Paint** works fine, but if you have **Photoshop**, I highly recommend using it instead.
+
 ## 🎨 Purpose
 
 I’ve noticed a lack of high-quality TWiLight Menu++ DSi themes — most come from the [twlmenu-extras GitHub repository](https://github.com/DS-Homebrew/twlmenu-extras), but options are still limited. \

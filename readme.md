@@ -63,10 +63,10 @@ qdst -t "TOP.png" -b "BOTTOM.png" -c "#FF00FF" --lm 2 --sm 2 --lmo 2 --smo 2 --b
 
 ### Quick Start
 
-The easiest way to get going is to download the latest release from [Releases](https://github.com/Raraselz/qdst/releases). \
+The easiest way to get going is to download the latest release from [Releases](https://github.com/Raraselz/qdst/releases). 
 
 1. Unzip the archive to a known location
-2. Add that location to path (for ease of use) (don't know how? see [this guide](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/))
+2. Add that location to your PATH environment variable (for ease of use) (don't know how? see [this guide](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/))
 3. You're set! In the place where you have saved the top and bottom images, right click and *Open in Terminal*.
 4. Run `qdst` with your desired settings.
 

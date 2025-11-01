@@ -41,6 +41,8 @@ Idk but I know you're smart if you use it so figure it out :))
 
 ***ImageMagick*** is required for conversion to 4-bit bitmaps compatible with TWiLight Menu++
 
+### Example Usage
+
 ```sh
 qdst -t "TOP.png" -b "BOTTOM.png" -c "#FF00FF" --lm 2 --sm 2 --lmo 2 --smo 2 --bgm "BGM.wav" --jp "My Cool Theme"
 ``` 

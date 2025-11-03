@@ -3,6 +3,7 @@ test/*
 test
 DRIGNEI 1/*
 preview/work/*
+a.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

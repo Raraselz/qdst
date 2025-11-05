@@ -61,7 +61,7 @@ def hex_to_rgb(hex: str) -> tuple[int, int, int]:
     return (r, g, b)
 
 def generate_and_show_preview():
-    pass
+    pass  
 
 def convert_to_4bit_bitmap(path: str, op_path: str, verbose: bool = False) -> bool:
     # Check if 'magick' is installed and in PATH

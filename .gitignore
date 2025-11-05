@@ -4,6 +4,7 @@ test
 DRIGNEI 1/*
 preview/work/*
 a.txt
+a.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
